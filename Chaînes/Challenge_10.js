@@ -1,0 +1,29 @@
+var prompt = require("prompt-sync")();
+
+function recherche_sous_chaine(text, sersh){
+    
+    let blocker = "";
+    for(let i = 0 ; i < text.length - 1; i++){
+        if(sersh[0] === text[i]){
+               
+            for(let j = i ; j <i + sersh.length ; j++){
+                blocker += text[j];
+            }
+            if(blocker === sersh){
+                return -1;
+            }
+        }
+    }
+    return 0;
+}
+
+let text = prompt("saisie un text : ");
+let sersh = prompt("rescherche : ");
+let flag = recherche_sous_chaine(text, sersh);
+if(flag == -1){
+    console.log("trouve");
+}
+else{
+    console.log("NON trouve");
+}
+
