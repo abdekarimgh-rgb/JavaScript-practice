@@ -27,14 +27,14 @@ if(age >= 65 && Annees_cotisation >= 30 && Montant_epragne >= 100000){
     console.log("Plan complet avec pension élevée");
     let tranche  = Math.floor((Montant_epragne - 50000) / 10000 );
     let bonusFin = tranche * 0.05;
-    console.log("avec bonus de : "+ bonusFin*100 +"%");
+    console.log("avec bonus de : "+ (bonusFin * 100).toFixed(2) +"%");
 }
 
 else if(age >= 65 && Annees_cotisation >= 20 && Montant_epragne >= 50000){
     console.log("Plan partiel avec pension moyenne");
     let tranche  = Maath.floor((Montant_epragne - 50000) / 10000 );
     let bonusFin = tranche * 0.05;
-    console.log("avec bonus de : "+ bonusFin * 100 +"%");
+    console.log("avec bonus de : "+ (bonusFin * 100).toFixed(2) +"%");
 }
 
 else{
