@@ -182,6 +182,9 @@ const trips = [
         availableSeats: 50
     }
 ];
+
+const tickets = [];
+let Nombre_plice = 0;
 let choix = -1;
 do {
     console.log(`
@@ -205,13 +208,14 @@ do {
 
     switch (choix) {
         case 1: console.log('=== TRAJETS DISPONIBLES === ');
-        affichage_trajet(trips);
+            affichage_trajet(trips);
             break;
 
         case 2: console.log('===ACHETER UN TICKET===');
+            achat_eticket(trips);
             break;
 
-        case 3: console.log('===LES TRAJETS DISPONIBLES===');
+        case 3: console.log('=== TICKETS === ');
             break;
 
         case 4: console.log("===ANNULATION D'UN ETICKET===");
@@ -223,17 +227,17 @@ do {
         case 6: console.log('===FILTRAGE DES TRAJET===');
             break;
 
-        case 1:console.log('===TRI DE TRAGET===');
+        case 7: console.log('===TRI DE TRAGET===');
             break;
-            default : console.log("**LR PROGRAMME QUETTE**");
+        default: console.log("**LR PROGRAMME QUETTE**");
     }
 
 } while (choix != 0);
 
-function affichage_trajet(){
-    for(let i = 0 ; i < trips.length ; i++){
+function affichage_trajet() {
+    for (let i = 0; i < trips.length; i++) {
         console.log(`
-        #${trips[i].id} Safi → ${trips[i].departure} 
+        #${trips[i].id} ${trips[i].destination} → ${trips[i].departure} 
         Départ : ${trips[i].departureTime}  
         Arrivée : ${trips[i].arrivalTime} 
         Prix : ${trips[i].price}DH 
@@ -242,3 +246,42 @@ function affichage_trajet(){
     }
 }
 
+function achat_eticket() {
+    let Name = prompt("Nom du passager : ");
+    let Identifiant_trajet = Number(prompt("Identifiant du trajet : "));
+
+    let index = trips.findIndex(trips => trips.id === Identifiant_trajet);
+    if (index === -1) {
+        console.log(`**Trajet introuvable.**`);
+    }
+    else {
+        if (trips[index].availableSeats <= 0) {
+            console.log(`
+                **Train complet.**
+                `);
+        }
+        else {
+            Nombre_plice++;
+            console.log(`trajet : ${trips[index].departureTime} → ${trips[index].arrivalTime}`);
+            for (let i = 0; i < tickets.length; i++) {
+                tickets[i].id = trips[index].id;
+                tickets[i].passengerName = Name;
+                tickets[i].tripId = Identifiant_trajet;               // t2akd mn hadi..!
+                tickets[i].seatNumber = trips[index].availableSeats   //hta hadi
+                tickets[i].price = trips[index].price;
+            }
+
+            console.log(`
+   |==Ticket acheté avec succès==|
+    _______________________________
+    |    Ticket #${trips[index].id} 
+    |    Passager : ${Name} 
+    |    Trajet   : ${trips[index].departure} → ${trips[index].destination}
+    |    Place    : ${trips[index].availableSeats}
+    |    Prix     : ${trips[index].price} DH 
+    ______________________________`)
+    
+        }
+        trips[index].availableSeats--;
+    }
+}
