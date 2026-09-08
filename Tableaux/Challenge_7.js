@@ -10,13 +10,13 @@ for(let i = 0 ; i < taille ; i++){
 console.log(`les elements des tableau est : ${tableau} `);
 
 for(let i = 0 ; i < taille ; i++){
-        for(let j = 1 ; j < taille ; j++){
-            if(tableau[j] < tableau[j-1]){
-                let tab = tableau[j];
-                tableau[j] = tableau[j-1];
-                tableau[j-1] = tab;
-            }
+    for(let j = 1 ; j < taille ; j++){
+        if(tableau[j] < tableau[j-1]){
+            let tab = tableau[j];
+            tableau[j] = tableau[j-1];
+            tableau[j-1] = tab;
         }
+    }
 }
 
 console.log(tableau);

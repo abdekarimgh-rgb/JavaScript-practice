@@ -15,7 +15,7 @@ for(let i = 0 ; i < taille_N ; i++){
     tabeau_N[i] = Number(prompt(`tableau_N[${i+1}] = `));
 }
 
-fin = tabeau + taille_N;
+//fin = tabeau + taille_N;
 let j  = 0;
 for(let i = taille ; i < taille_N + taille ; i++){
     tabeau[i] = tabeau_N[j];
