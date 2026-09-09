@@ -185,8 +185,8 @@ const trips = [
 
 const tickets = [];
 const tickets_annuler = [];
-let Nombre_ticket = 0;
-let Nombre_ticket_annul = 0;
+//let Nombre_ticket = 0;
+//let Nombre_ticket_annul = 0;
 let ticket_id = 0;
 let choix = -1;
 do {
@@ -237,6 +237,11 @@ do {
         case 7: console.log('===TRI DE TRAGET===');
             Trier_trajets(trips)
             break;
+
+        case 8: console.log("===NOMBRETOTALE DE TICKETS VUNDUS===");
+        nombre
+            console.log("")
+            break;
         default: console.log("**AUCUN OPERATION EXISTE**");
     }
 
@@ -245,7 +250,7 @@ do {
 function affichage_trajet() {
     for (let i = 0; i < trips.length; i++) {
         console.log(`
-        #${trips[i].id} ${trips[i].destination} → ${trips[i].departure} 
+        #${trips[i].id} ${trips[i].departure} → ${trips[i].destination} 
         Départ : ${trips[i].departureTime}  
         Arrivée : ${trips[i].arrivalTime} 
         Prix : ${trips[i].price}DH 
@@ -265,7 +270,7 @@ function achat_eticket() {
     else {
         if (trips[index].availableSeats <= 0) {
             console.log(`
-                **Train complet.**
+                **Train complet**
                 `);
         }
         else {
@@ -281,17 +286,17 @@ function achat_eticket() {
                     price: trips[index].price
                 }
             )
-            Nombre_ticket++;
+            //Nombre_ticket++;
             ticket_id++;
             console.log(`
    |==Ticket acheté avec succès==|
     _______________________________
     |    Ticket #${trips[index].id} 
-    |    Passager : ${Name} 
+    |    Passager : ${Name}                                            //rappel cet ligne doit chonge source des donnee
     |    Trajet   : ${trips[index].departure} → ${trips[index].destination}
     |    Place    : ${trips[index].availableSeats}
     |    Prix     : ${trips[index].price} DH 
-    ______________________________`)
+    |______________________________`)
 
             trips[index].availableSeats--;
         }
@@ -300,11 +305,11 @@ function achat_eticket() {
 ///////////////////////////////////////////////////////////////////////////////////////////////
 function Afficher_tickets() {
 
-    for (let i = 0; i < Nombre_ticket; i++) {
+    for (let i = 0; i < tickets.length; i++) {
         console.log(`
     ${i + 1}: _______________________________
-    |    Ticket #${tickets[i].id} 
-    |    Passager : ${tickets[i].passengerName} 
+    |    Ticket #${tickets[i].id}
+    |    Passager : ${tickets[i].passengerName}
     |    Trajet   : ${tickets[i].departure} → ${tickets[i].arrive}
     |    Place    : ${tickets[i].seatNumber}
     |    Prix     : ${tickets[i].price} DH 
@@ -316,7 +321,7 @@ function annulation_ticket() {
     let sersh_id = Number(prompt("saisir Identifiant du ticket : "));
     let index = tickets.findIndex(tickets => tickets.id === sersh_id);
     if (index === -1) {
-        console.log(`**Ticket introuvable.**`)
+        console.log(`**Ticket introuvable.**`);
     }
 
     else {
@@ -337,20 +342,16 @@ function annulation_ticket() {
 
         console.log(`**Ticket annulé avec succès.**`);
 
-        Nombre_ticket--;
-        Nombre_ticket_annul++;
+        //Nombre_ticket--;
+        //Nombre_ticket_annul++;
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////
 function Rechercher_ticket() {
     let sersh_name = prompt("Nom du passager : ");
     let flag = 0;
-    for (let i = 0; i < Nombre_ticket; i++) {
+    for (let i = 0; i < tickets.length; i++) {
         if (sersh_name === tickets[i].passengerName) {
-
-            console.log(tickets[i].passengerName);
-            console.log(sersh_name);
-
             console.log(`
      votre ticket :_________________
     |   Ticket #${tickets[i].id} 
@@ -386,7 +387,7 @@ function Trier_trajets() {
             price: trips[i].price
         }
     }
-    for (let i = 1; i < tabTri.length - 1; i++) {
+    for (let i = 0; i < tabTri.length -1; i++) {
         for (let j = 1; j < tabTri.length; j++) {
             if (tabTri[j].price < tabTri[j - 1].price) {
                 let tmp = tabTri[j];
