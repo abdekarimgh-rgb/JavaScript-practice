@@ -231,9 +231,11 @@ do {
             break;
 
         case 6: console.log('===FILTRAGE DES TRAJET===');
+            Filtrer_trajets(trips);
             break;
 
         case 7: console.log('===TRI DE TRAGET===');
+            Trier_trajets(trips)
             break;
         default: console.log("**AUCUN OPERATION EXISTE**");
     }
@@ -330,7 +332,7 @@ function annulation_ticket() {
         tickets_annuler.push(tickets[index]);
 
         let stock = tickets[index].tripId;
-        trips[stock-1].availableSeats++;
+        trips[stock - 1].availableSeats++;
         tickets.splice(index, 1);
 
         console.log(`**Ticket annulé avec succès.**`);
@@ -340,11 +342,11 @@ function annulation_ticket() {
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////
-function Rechercher_ticket(){
+function Rechercher_ticket() {
     let sersh_name = prompt("Nom du passager : ");
     let flag = 0;
     for (let i = 0; i < Nombre_ticket; i++) {
-        if (sersh_name === tickets[i].passengerName){
+        if (sersh_name === tickets[i].passengerName) {
 
             console.log(tickets[i].passengerName);
             console.log(sersh_name);
@@ -360,9 +362,41 @@ function Rechercher_ticket(){
             flag = -1;
         }
     }
-    if(flag == 0){
+    if (flag == 0) {
         console.log(`
             Aucun resultat..!`);
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////
+function Filtrer_trajets() {
+    let villeDepart = prompt('Ville de départ : ');
+    for (let i = 0; i < trips.length; i++) {
+        if (villeDepart.toLowerCase() === trips[i].departure.toLowerCase()) {
+            console.log(`${trips[i].departure} → ${trips[i].destination} : ${trips[i].price} DH`);
+        }
+    }
+}
+///////////////////////////////////////////////////////////////////////////////////////////////
+function Trier_trajets() {
+    let tabTri = [];
+    for (let i = 0; i < trips.length; i++) {
+        tabTri[i] = {
+            depare: trips[i].departure,
+            arrive: trips[i].destination,
+            price: trips[i].price
+        }
+    }
+    for (let i = 1; i < tabTri.length - 1; i++) {
+        for (let j = 1; j < tabTri.length; j++) {
+            if (tabTri[j].price < tabTri[j - 1].price) {
+                let tmp = tabTri[j];
+                tabTri[j] = tabTri[j - 1];
+                tabTri[j - 1] = tmp;
+            }
+        }
+    }
+    for (let i = 0; i < tabTri.length; i++) {
+        console.log(`${tabTri[i].depare} → ${tabTri[i].arrive} : ${tabTri[i].price} DH`);
+    }
+}
+/////////////////////////////////////////////////////////////////////////////////////////////
