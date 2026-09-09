@@ -184,7 +184,10 @@ const trips = [
 ];
 
 const tickets = [];
-let Nombre_plice = 0;
+const tickets_annuler = [];
+let Nombre_ticket = 0;
+let Nombre_ticket_annul = 0;
+let ticket_id = 0;
 let choix = -1;
 do {
     console.log(`
@@ -193,7 +196,7 @@ do {
     ================================= 
     1. Afficher les trajets 
     2. Acheter un ticket 
-    3. Afficher les tickets 
+    3. Afficher les tickets
     4. Annuler un ticket 
     5. Rechercher un ticket 
     6. Filtrer les trajets 
@@ -216,12 +219,15 @@ do {
             break;
 
         case 3: console.log('=== TICKETS === ');
+            Afficher_tickets(tickets, trips);
             break;
 
         case 4: console.log("===ANNULATION D'UN ETICKET===");
+            annulation_ticket(tickets);
             break;
 
-        case 5: console.log('===ACHETER UN TICKET===');
+        case 5: console.log('===RECHERCHE UN TICKETS===');
+            Rechercher_ticket(tickets);
             break;
 
         case 6: console.log('===FILTRAGE DES TRAJET===');
@@ -229,11 +235,11 @@ do {
 
         case 7: console.log('===TRI DE TRAGET===');
             break;
-        default: console.log("**LR PROGRAMME QUETTE**");
+        default: console.log("**AUCUN OPERATION EXISTE**");
     }
 
 } while (choix != 0);
-
+///////////////////////////////////////////////////////////////////////////////////////////////
 function affichage_trajet() {
     for (let i = 0; i < trips.length; i++) {
         console.log(`
@@ -245,7 +251,7 @@ function affichage_trajet() {
         `);
     }
 }
-
+/////////////////////////////////////////////////////////////////////////////////////////////
 function achat_eticket() {
     let Name = prompt("Nom du passager : ");
     let Identifiant_trajet = Number(prompt("Identifiant du trajet : "));
@@ -261,16 +267,20 @@ function achat_eticket() {
                 `);
         }
         else {
-            Nombre_plice++;
             console.log(`trajet : ${trips[index].departureTime} → ${trips[index].arrivalTime}`);
-            for (let i = 0; i < tickets.length; i++) {
-                tickets[i].id = trips[index].id;
-                tickets[i].passengerName = Name;
-                tickets[i].tripId = Identifiant_trajet;               // t2akd mn hadi..!
-                tickets[i].seatNumber = trips[index].availableSeats   //hta hadi
-                tickets[i].price = trips[index].price;
-            }
-
+            tickets.push(
+                {
+                    id: ticket_id,
+                    passengerName: Name,
+                    tripId: trips[index].id,
+                    departure: trips[index].departure,
+                    arrive: trips[index].destination,
+                    seatNumber: trips[index].availableSeats,
+                    price: trips[index].price
+                }
+            )
+            Nombre_ticket++;
+            ticket_id++;
             console.log(`
    |==Ticket acheté avec succès==|
     _______________________________
@@ -280,8 +290,79 @@ function achat_eticket() {
     |    Place    : ${trips[index].availableSeats}
     |    Prix     : ${trips[index].price} DH 
     ______________________________`)
-    
+
+            trips[index].availableSeats--;
         }
-        trips[index].availableSeats--;
     }
 }
+///////////////////////////////////////////////////////////////////////////////////////////////
+function Afficher_tickets() {
+
+    for (let i = 0; i < Nombre_ticket; i++) {
+        console.log(`
+    ${i + 1}: _______________________________
+    |    Ticket #${tickets[i].id} 
+    |    Passager : ${tickets[i].passengerName} 
+    |    Trajet   : ${tickets[i].departure} → ${tickets[i].arrive}
+    |    Place    : ${tickets[i].seatNumber}
+    |    Prix     : ${tickets[i].price} DH 
+    ______________________________`)
+    }
+}
+///////////////////////////////////////////////////////////////////////////////////////////////
+function annulation_ticket() {
+    let sersh_id = Number(prompt("saisir Identifiant du ticket : "));
+    let index = tickets.findIndex(tickets => tickets.id === sersh_id);
+    if (index === -1) {
+        console.log(`**Ticket introuvable.**`)
+    }
+
+    else {
+        console.log(`
+     votre ticket :____________________
+    |   Ticket #${tickets[index].id} 
+    |    Passager : ${tickets[index].passengerName} 
+    |    Trajet   : ${tickets[index].departure} → ${tickets[index].arrive}
+    |    Place    : ${tickets[index].seatNumber}
+    |    Prix     : ${tickets[index].price} DH 
+    ______________________________`);
+
+        tickets_annuler.push(tickets[index]);
+
+        let stock = tickets[index].tripId;
+        trips[stock-1].availableSeats++;
+        tickets.splice(index, 1);
+
+        console.log(`**Ticket annulé avec succès.**`);
+
+        Nombre_ticket--;
+        Nombre_ticket_annul++;
+    }
+}
+///////////////////////////////////////////////////////////////////////////////////////////////
+function Rechercher_ticket(){
+    let sersh_name = prompt("Nom du passager : ");
+    let flag = 0;
+    for (let i = 0; i < Nombre_ticket; i++) {
+        if (sersh_name === tickets[i].passengerName){
+
+            console.log(tickets[i].passengerName);
+            console.log(sersh_name);
+
+            console.log(`
+     votre ticket :_________________
+    |   Ticket #${tickets[i].id} 
+    |    Passager : ${tickets[i].passengerName} 
+    |    Trajet   : ${tickets[i].departure} → ${tickets[i].arrive}
+    |    Place    : ${tickets[i].seatNumber}
+    |    Prix     : ${tickets[i].price} DH 
+    ______________________________`);
+            flag = -1;
+        }
+    }
+    if(flag == 0){
+        console.log(`
+            Aucun resultat..!`);
+    }
+}
+///////////////////////////////////////////////////////////////////////////////////////////////
