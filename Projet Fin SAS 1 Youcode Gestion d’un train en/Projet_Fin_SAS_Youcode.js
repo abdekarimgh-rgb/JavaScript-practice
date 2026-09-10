@@ -199,12 +199,13 @@ do {
     5. Rechercher un ticket 
     6. Filtrer les trajets 
     7. Trier les trajets 
+    8. Statistiques
     0. Quitter 
  `);
 
     do {
         choix = Number(prompt("Votre choix : "));
-    } while (choix < 0 || choix > 7);
+    } while (choix < 0 || choix > 8);
 
 
     switch (choix) {
@@ -237,10 +238,10 @@ do {
             break;
 
         case 8: console.log("===NOMBRETOTALE DE TICKETS VUNDUS===");
-            nombre
-            console.log("")
+            Statistiques();
+            plus_vendu();
             break;
-        default: console.log("**AUCUN OPERATION EXISTE**");
+        default: console.log("===STATISTIAUES===");
     }
 
 } while (choix != 0);
@@ -259,8 +260,8 @@ function affichage_trajet() {
 /////////////////////////////////////////////////////////////////////////////////////////////
 function achat_eticket() {
 
-    let Name = prompt("Nom du passager : ");
-    let Identifiant_trajet = Number(prompt("Identifiant du trajet : "));
+    let Name = prompt("NOM DE PASSAGER : ");
+    let Identifiant_trajet = Number(prompt("IDENTIFIANT DU TRAJET : "));
     let index = trips.findIndex(trips => trips.id === Identifiant_trajet);
     if (index === -1) {
         console.log(`**Trajet introuvable.**`);
@@ -273,7 +274,7 @@ function achat_eticket() {
             console.log(`**Train complet**`);
         }
         else {
-            console.log(`trajet : ${trips[index].departureTime} → ${trips[index].arrivalTime}`);
+            console.log(`trajet : ${trips[index].departure} → ${trips[index].destination}`);
 
             tickets.push(
                 {
@@ -286,7 +287,6 @@ function achat_eticket() {
                     price: trips[index].price
                 }
             );
-
 
             console.log(`
    |==Ticket acheté avec succès==|
@@ -320,6 +320,7 @@ function Afficher_tickets() {
 function annulation_ticket() {
     let sersh_id = Number(prompt("saisir Identifiant du ticket : "));
     let index = tickets.findIndex(tickets => tickets.id === sersh_id);
+
     if (index === -1) {
         console.log(`**Ticket introuvable.**`);
     }
@@ -430,4 +431,37 @@ function returne_tickets(tickets, trips, Identifiant_trajet, Name, index) {
         tickets_annuler.splice(index2, 1);
         trips[sotckIndex].availableSeats--;
     }
+}
+function Statistiques() {
+    let nombre_Ticket_sVondus = tickets.length;
+    console.log("Nombre total de tickets : " + nombre_Ticket_sVondus);
+
+    let somme = 0;
+    for (let i = 0; i < tickets.length; i++) {
+        somme = somme + tickets[i].price;
+    }
+    console.log("Chiffre d'affaires total : " + somme + "DH");
+}
+
+function plus_vendu() {
+    let trajet_plus_vendu = trips[0].availableSeats;
+    stocker = [];
+    for (let i = 0; i < trips.length; i++) {
+        if (trips[i].availableSeats < trajet_plus_vendu) {
+            trajet_plus_vendu = trips[i].availableSeats,
+                stocker = (
+                    {
+                        direction: trips[i].id,
+                        depare: trips[i].departure,
+                        destin: trips[i].destination,
+                        place: trips[i].availableSeats
+                    }
+                )
+        }
+    }
+    let result = 50 - stocker.place;
+
+    console.log(`Trajet le plus vendu : 
+${stocker.depare} → ${stocker.destin}`);
+    console.log(result + " tickets vendus");
 }
