@@ -185,9 +185,7 @@ const trips = [
 
 const tickets = [];
 const tickets_annuler = [];
-//let Nombre_ticket = 0;
-//let Nombre_ticket_annul = 0;
-let ticket_id = 0;
+let ticket_id = 1;
 let choix = -1;
 do {
     console.log(`
@@ -239,7 +237,7 @@ do {
             break;
 
         case 8: console.log("===NOMBRETOTALE DE TICKETS VUNDUS===");
-        nombre
+            nombre
             console.log("")
             break;
         default: console.log("**AUCUN OPERATION EXISTE**");
@@ -260,21 +258,23 @@ function affichage_trajet() {
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
 function achat_eticket() {
+
     let Name = prompt("Nom du passager : ");
     let Identifiant_trajet = Number(prompt("Identifiant du trajet : "));
-
     let index = trips.findIndex(trips => trips.id === Identifiant_trajet);
     if (index === -1) {
         console.log(`**Trajet introuvable.**`);
     }
     else {
-        if (trips[index].availableSeats <= 0) {
-            console.log(`
-                **Train complet**
-                `);
+        if (tickets_annuler.length > 0) {
+            returne_tickets(tickets, trips, Identifiant_trajet, Name, index);
+        }
+        else if (trips[index].availableSeats <= 0) {
+            console.log(`**Train complet**`);
         }
         else {
             console.log(`trajet : ${trips[index].departureTime} → ${trips[index].arrivalTime}`);
+
             tickets.push(
                 {
                     id: ticket_id,
@@ -285,19 +285,19 @@ function achat_eticket() {
                     seatNumber: trips[index].availableSeats,
                     price: trips[index].price
                 }
-            )
-            //Nombre_ticket++;
-            ticket_id++;
+            );
+
+
             console.log(`
    |==Ticket acheté avec succès==|
     _______________________________
-    |    Ticket #${trips[index].id} 
-    |    Passager : ${Name}                                            //rappel cet ligne doit chonge source des donnee
+    |    Ticket #${ticket_id} 
+    |    Passager : ${Name}
     |    Trajet   : ${trips[index].departure} → ${trips[index].destination}
     |    Place    : ${trips[index].availableSeats}
     |    Prix     : ${trips[index].price} DH 
     |______________________________`)
-
+            ticket_id++;
             trips[index].availableSeats--;
         }
     }
@@ -307,7 +307,7 @@ function Afficher_tickets() {
 
     for (let i = 0; i < tickets.length; i++) {
         console.log(`
-    ${i + 1}: _______________________________
+    ${i + 1}: ________________________
     |    Ticket #${tickets[i].id}
     |    Passager : ${tickets[i].passengerName}
     |    Trajet   : ${tickets[i].departure} → ${tickets[i].arrive}
@@ -342,8 +342,6 @@ function annulation_ticket() {
 
         console.log(`**Ticket annulé avec succès.**`);
 
-        //Nombre_ticket--;
-        //Nombre_ticket_annul++;
     }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -359,7 +357,7 @@ function Rechercher_ticket() {
     |    Trajet   : ${tickets[i].departure} → ${tickets[i].arrive}
     |    Place    : ${tickets[i].seatNumber}
     |    Prix     : ${tickets[i].price} DH 
-    ______________________________`);
+    |______________________________`);
             flag = -1;
         }
     }
@@ -387,7 +385,7 @@ function Trier_trajets() {
             price: trips[i].price
         }
     }
-    for (let i = 0; i < tabTri.length -1; i++) {
+    for (let i = 0; i < tabTri.length - 1; i++) {
         for (let j = 1; j < tabTri.length; j++) {
             if (tabTri[j].price < tabTri[j - 1].price) {
                 let tmp = tabTri[j];
@@ -400,4 +398,36 @@ function Trier_trajets() {
         console.log(`${tabTri[i].depare} → ${tabTri[i].arrive} : ${tabTri[i].price} DH`);
     }
 }
-/////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////
+function returne_tickets(tickets, trips, Identifiant_trajet, Name, index) {
+
+    let index2 = tickets_annuler.findIndex(tickets_annuler => tickets_annuler.tripId === Identifiant_trajet);
+    if (index2 > -1) {
+        let seat = tickets_annuler[index2].seatNumber;
+        tickets[tickets.length] = (
+            {
+                id: ticket_id,
+                passengerName: Name,
+                tripId: trips[index].id,
+                departure: trips[index].departure,
+                arrive: trips[index].destination,
+                seatNumber: seat,
+                price: trips[index].price
+            }
+        )
+        console.log(`
+
+       Ticket acheté avec succès
+    _______________________________
+    |    Ticket #${tickets_annuler[index2].id} 
+    |    Passager : ${Name}
+    |    Trajet   : ${tickets_annuler[index2].departure} → ${tickets_annuler[index2].destination}
+    |    Place    : ${tickets_annuler[index2].availableSeats}
+    |    Prix     : ${tickets_annuler[index2].price} DH 
+    |______________________________`)
+        ticket_id++;
+        let sotckIndex = trips.findIndex(trips => trips.id === tickets_annuler[index2].tripId);
+        tickets_annuler.splice(index2, 1);
+        trips[sotckIndex].availableSeats--;
+    }
+}
